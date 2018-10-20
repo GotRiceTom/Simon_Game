@@ -78,9 +78,9 @@ void Model::redButtonClicked()
     {
         playerProgress++;
 
-        //update progress bar to playerProgress/level * 100
+        //update progress bar to ((playerProgress * 100) / level)
 
-        if (1000 * playerProgress/level == 100)
+        if (playerProgress == level)
         {
             computersTurn();
         }
@@ -104,9 +104,9 @@ void Model::yellowButtonClicked()
     {
         playerProgress++;
 
-        //update progress bar to playerProgress/level * 100
+        //update progress bar to ((playerProgress * 100) / level)
 
-        if (1000 * playerProgress/level == 100)
+        if (playerProgress == level)
         {
             computersTurn();
         }
@@ -130,9 +130,9 @@ void Model::greenButtonClicked()
     {
         playerProgress++;
 
-        //update progress bar to playerProgress/level * 100
+        //update progress bar to ((playerProgress * 100) / level)
 
-        if (1000 * playerProgress/level == 100)
+        if (playerProgress == level)
         {
             computersTurn();
         }
