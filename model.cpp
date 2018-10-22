@@ -10,11 +10,14 @@ Model::Model()
     level = 0;
 
     //fills the sequence with random numbers between 1 and 4
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 10; i++)
     {
         //red = 1, yellow = 2, green = 3, blue = 4
         sequence[i] = rand()%4 + 1;
+        std::cout<< sequence[i] << std::endl;
     }
+
+    std::cout << "Length of array = " << (sizeof(sequence)/sizeof(*sequence)) << std::endl;
 
     gameState = "wait";
 }
@@ -49,7 +52,7 @@ void Model::computersTurn()
     for (int i = 0; i < level; i++)
     {
         color = sequence[i];
-        blinkColor(color);
+       // blinkColor(color);
     }
 
     //set the game state text box to "Your Turn"
@@ -165,6 +168,11 @@ void Model::blueButtonClicked()
     }
 }
 
+int Model::getAICurrentLevel()
+{
+    return 0;
+}
+
 void Model::gameOver()
 {
     gameState = "wait";
@@ -178,25 +186,8 @@ void Model::gameOver()
     //set the game state box to "Game Over"
 }
 
-void Model::blinkColor(int color)
+void Model::getLevel()
 {
-    if (color == 1)
-    {
-        //blink the red button
-    }
 
-    if (color == 2)
-    {
-        //blink the yellow button
-    }
-
-    if (color == 3)
-    {
-        //blink the green button
-    }
-
-    if (color == 4)
-    {
-        //blink the blue button
-    }
 }
+

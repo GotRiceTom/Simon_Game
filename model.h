@@ -15,20 +15,29 @@ private:
     //length of current sequence
     int level;
 
-    int sequence[1000];
+    int sequence[10];
+
+
+
+public:
 
     //constructor
     Model();
 
-public:
     void startButtonClicked();
     void computersTurn();
-    void blinkColor(int color);
     void redButtonClicked();
     void yellowButtonClicked();
     void greenButtonClicked();
     void blueButtonClicked();
+
+    //added helper method in the model class
+    bool isCorrectSeq(int);
+    int getAICurrentLevel();
     void gameOver();
+    void getLevel();
+    void addStep();
+    void resertStep();
 };
 
 #endif // MODEL_H
