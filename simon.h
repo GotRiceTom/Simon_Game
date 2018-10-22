@@ -2,6 +2,7 @@
 #define SIMON_H
 
 #include <QWidget>
+#include <QtGui>
 
 namespace Ui {
 class Simon;
@@ -17,6 +18,10 @@ public:
 
 private:
     Ui::Simon *ui;
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
+
+
 };
 
 #endif // SIMON_H
