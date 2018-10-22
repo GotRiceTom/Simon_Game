@@ -39,10 +39,10 @@ void Model::computersTurn()
 
     //set the game state text box to "AI's Turn"
 
-    //set the progress bar to 0%
-
     //wait for 1 second before showing player colors
     std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    //set the progress bar to 0%
 
     //blink the colors
     int color = 0;
@@ -78,9 +78,9 @@ void Model::redButtonClicked()
     {
         playerProgress++;
 
-        //update progress bar to playerProgress/level * 100
+        //update progress bar to ((playerProgress * 100) / level)
 
-        if (1000 * playerProgress/level == 100)
+        if (playerProgress == level)
         {
             computersTurn();
         }
@@ -104,9 +104,9 @@ void Model::yellowButtonClicked()
     {
         playerProgress++;
 
-        //update progress bar to playerProgress/level * 100
+        //update progress bar to ((playerProgress * 100) / level)
 
-        if (1000 * playerProgress/level == 100)
+        if (playerProgress == level)
         {
             computersTurn();
         }
@@ -130,9 +130,9 @@ void Model::greenButtonClicked()
     {
         playerProgress++;
 
-        //update progress bar to playerProgress/level * 100
+        //update progress bar to ((playerProgress * 100) / level)
 
-        if (1000 * playerProgress/level == 100)
+        if (playerProgress == level)
         {
             computersTurn();
         }
@@ -156,9 +156,9 @@ void Model::blueButtonClicked()
     {
         playerProgress++;
 
-        //update progress bar to playerProgress/level * 100
+        //update progress bar to ((playerProgress * 100) / level)
 
-        if (1000 * playerProgress/level == 100)
+        if (playerProgress == level)
         {
             computersTurn();
         }
