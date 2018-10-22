@@ -16,6 +16,9 @@ public:
     explicit Simon(QWidget *parent = nullptr);
     ~Simon();
 
+private slots:
+    void startButton_clicked();
+
 private:
     Ui::Simon *ui;
     void keyPressEvent(QKeyEvent *event);
