@@ -13,6 +13,7 @@ Model::Model()
     playerProgress = 0;
     AIProgress = 0;
     gameState = "wait";
+    waitedOneBlink = false;
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(blinkTheSequence()));
@@ -54,21 +55,19 @@ void Model::computersTurn()
 
     //set the game state text box to "AI's Turn"
     emit setGameStateTextBoxSignal("AI's Turn");
-
-    //set the progress bar to 0%
-    emit setProgressBarValueSignal(0);
 }
 
 void Model::blinkTheSequence()
 {
     cout << "BLINK" << endl;
+
     if (gameState == "AI")
     {
         if (AIProgress == level)
         {
             AIProgress = 0;
 
-            if (timer->interval() > 200)
+            if (timer->interval() > 300)
             {
                 timer->stop();
                 timer->setInterval(timer->interval()-100);
@@ -79,11 +78,24 @@ void Model::blinkTheSequence()
             emit setGameStateTextBoxSignal("Your Turn");
             emit setColorsWhiteSignal();
             emit enableColorButtonsSignal();
+            playerProgress = 0;
+
+            //set the progress bar to 0%
+            emit setProgressBarValueSignal(0);
+
+            return;
+        }
+
+        if (AIProgress == 0 && !waitedOneBlink)
+        {
+            waitedOneBlink = true;
+            cout << "WAITED" << endl;
             return;
         }
 
         if (AIProgress < level)
         {
+            waitedOneBlink = false;
             blinkColor(sequence[AIProgress]);
             AIProgress++;
         }
@@ -225,29 +237,32 @@ void Model::gameOver()
 
 void Model::blinkColor(int color)
 {
+    int wait;
+    if (level < 5)
+        wait = 200;
+    else wait = 40;
+
     if (color == 1)
     {
         emit blinkRedSignalOn();
-        QTimer::singleShot(timer->interval()-200, this, SLOT(setColorsWhite()));
     }
 
     if (color == 2)
     {
         emit blinkYellowSignalOn();
-        QTimer::singleShot(timer->interval()-200, this, SLOT(setColorsWhite()));
     }
 
     if (color == 3)
     {
         emit blinkGreenSignalOn();
-        QTimer::singleShot(timer->interval()-200, this, SLOT(setColorsWhite()));
     }
 
     if (color == 4)
     {
         emit blinkBlueSignalOn();
-        QTimer::singleShot(timer->interval()-200, this, SLOT(setColorsWhite()));
     }
+
+    QTimer::singleShot(timer->interval()-wait, this, SLOT(setColorsWhite()));
 }
 
 void Model::setColorsWhite()

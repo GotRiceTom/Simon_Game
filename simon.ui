@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>399</width>
-    <height>360</height>
+    <height>372</height>
    </rect>
   </property>
   <property name="palette">
@@ -808,7 +808,7 @@
      <x>10</x>
      <y>320</y>
      <width>381</width>
-     <height>31</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="palette">
@@ -883,7 +883,7 @@
     </font>
    </property>
    <property name="placeholderText">
-    <string>PLAY WITH THE MOUSE OR THE ARROW KEYS.</string>
+    <string>YOU CAN PLAY WITH THE MOUSE OR THE NUMBER PAD (8,4,6,2).  ISN'T THAT NICE?</string>
    </property>
   </widget>
   <widget class="QTextEdit" name="GameStateBox">

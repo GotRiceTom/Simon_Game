@@ -21,6 +21,7 @@ private:
     //how many times the player has clicked
     int playerProgress;
     int AIProgress;
+    bool waitedOneBlink;
 
     //length of current sequence
     int level;
