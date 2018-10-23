@@ -18,7 +18,7 @@ Simon::Simon(Model* m,QWidget *parent) :
     // you can get the current value from the progress by calling
     // progressBar.value()s
     ui->progressBar->setMinimum(0);
-    ui->progressBar->setMaximum(5);
+    ui->progressBar->setMaximum(100);
 
     // the proper way to do a two way connection from view -> model and model -> view
    //connect(this, SIGNAL(modelSignal()), SimonModel, SLOT(displayMessage()));
@@ -71,23 +71,23 @@ void Simon::keyPressEvent(QKeyEvent *event){
 
     if(event->key() == Qt::Key_8){
         ui->redButton->setStyleSheet("background-color:red");
-        ui->progressBar->setValue(ui->progressBar->value() + 1);
+        //ui->progressBar->setValue(ui->progressBar->value() + 1);
     }
 
     if(event->key() == Qt::Key_4){
         ui->yellowButton->setStyleSheet("background-color:yellow");
-        ui->progressBar->setValue(ui->progressBar->value() + 1);
+        //ui->progressBar->setValue(ui->progressBar->value() + 1);
     }
 
     if(event->key() == Qt::Key_2){
         ui->blueButton->setStyleSheet("background-color:blue");
-        ui->progressBar->setValue(ui->progressBar->value() + 1);
+        //ui->progressBar->setValue(ui->progressBar->value() + 1);
 
     }
 
     if(event->key() == Qt::Key_6){
         ui->greenButton->setStyleSheet("background-color:green");
-        ui->progressBar->setValue(ui->progressBar->value() + 1);
+        //ui->progressBar->setValue(ui->progressBar->value() + 1);
     }
 }
 
@@ -185,25 +185,40 @@ void Simon::displayProgressBar(int progress)
 //Below methods blink the button on and off //
 void Simon::blinkRedButtonOn()
 {
+    ui->redButton->setStyleSheet("background-color:white");
+    ui->yellowButton->setStyleSheet("background-color:white");
+    ui->greenButton->setStyleSheet("background-color:white");
+    ui->blueButton->setStyleSheet("background-color:white");
     ui->redButton->setStyleSheet("background-color:red");
-
 }
 
 
 void Simon::blinkGreenButtonOn()
 {
+    ui->redButton->setStyleSheet("background-color:white");
+    ui->yellowButton->setStyleSheet("background-color:white");
+    ui->greenButton->setStyleSheet("background-color:white");
+    ui->blueButton->setStyleSheet("background-color:white");
     ui->greenButton->setStyleSheet("background-color:green");
 
 }
 
 void Simon::blinkBlueButtonOn()
 {
+    ui->redButton->setStyleSheet("background-color:white");
+    ui->yellowButton->setStyleSheet("background-color:white");
+    ui->greenButton->setStyleSheet("background-color:white");
+    ui->blueButton->setStyleSheet("background-color:white");
     ui->blueButton->setStyleSheet("background-color:blue");
 
 }
 
 void Simon::blinkYellowButtonOn()
 {
+    ui->redButton->setStyleSheet("background-color:white");
+    ui->yellowButton->setStyleSheet("background-color:white");
+    ui->greenButton->setStyleSheet("background-color:white");
+    ui->blueButton->setStyleSheet("background-color:white");
     ui->yellowButton->setStyleSheet("background-color:yellow");
 
 }

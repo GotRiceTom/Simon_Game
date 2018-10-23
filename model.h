@@ -17,6 +17,8 @@ private:
 
     //how many times the player has clicked
     int playerProgress;
+    int AIProgress;
+    int buffer;
 
     //length of current sequence
     int level;
@@ -31,8 +33,6 @@ public:
     void computersTurn();
     void gameOver();
 
-    void blinkTheSequence();
-
 public slots:
 
     void startButtonClicked();
@@ -41,6 +41,7 @@ public slots:
     void greenButtonClicked();
     void blueButtonClicked();
     void blinkColor(int color,int duration);
+    void blinkTheSequence();
 
     //below methods will use the single shot
     void blinkBlueOff();

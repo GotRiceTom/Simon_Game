@@ -9,9 +9,15 @@ using namespace std;
 
 Model::Model()
 {
-    level = 2;
-
+    level = 25;
+    playerProgress = 0;
+    AIProgress = 0;
     gameState = "wait";
+    buffer = 0;
+
+    QTimer* timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(blinkTheSequence()));
+    timer->start(100);
 }
 
 void Model::startButtonClicked()
@@ -37,9 +43,6 @@ void Model::computersTurn()
 
     level++;
 
-    emit disableColorButtonsSignal();
-    cout << "disabling" << endl;
-
     //set the game's level box to the current level
     emit setLevelTextBoxSignal(QString::number(level));
 
@@ -50,21 +53,31 @@ void Model::computersTurn()
     emit setProgressBarValueSignal(0);
 
     //blink the colors
-    blinkTheSequence();
-
-    //set the game state text box to "Your Turn"
-    emit setGameStateTextBoxSignal("Your Turn");
-
-    playerProgress = 0;
-
-    gameState = "player";
-
-    emit enableColorButtonsSignal();
-    cout << "enabling" << endl;
+    //blinkTheSequence();
 }
 
 void Model::blinkTheSequence()
 {
+    cout << "BLINK" << endl;
+
+    if (gameState == "AI")
+    {
+        if (AIProgress < level)
+        {
+             cout << "deepBLINK" << endl;
+            int duration = 2000 - (level*100);
+            if (duration < 200)
+            {
+                duration = 200;
+            }
+
+            blinkColor(sequence[AIProgress],duration);
+
+            AIProgress++;
+        }
+    }
+
+    /*
     for (int i = 0; i < level; i++)
     {
         int duration = 2000 - (level*100);
@@ -80,6 +93,7 @@ void Model::blinkTheSequence()
        blinkColor(sequence[i],duration);
         cout << "blinking " << i << endl;
     }
+    */
 }
 
 void Model::redButtonClicked()
@@ -215,7 +229,7 @@ void Model::blinkColor(int color,int duration)
     {
         //blink the red button
         emit blinkRedSignalOn();
-         QTimer::singleShot(duration, this, SLOT(blinkRedOff()));
+         //QTimer::singleShot(duration, this, SLOT(blinkRedOff()));
 
     }
 
@@ -223,21 +237,21 @@ void Model::blinkColor(int color,int duration)
     {
         //blink the yellow button
         emit blinkYellowSignalOn();
-         QTimer::singleShot(duration, this, SLOT(blinkYellowOff()));
+         //QTimer::singleShot(duration, this, SLOT(blinkYellowOff()));
     }
 
     if (color == 3)
     {
         //blink the green button
         emit blinkGreenSignalOn();
-        QTimer::singleShot(duration, this, SLOT(blinkGreenOff()));
+        //QTimer::singleShot(duration, this, SLOT(blinkGreenOff()));
     }
 
     if (color == 4)
     {
         //blink the blue button
         emit blinkBlueSignalOn();
-        QTimer::singleShot(duration, this, SLOT(blinkBlueOff()));
+        //QTimer::singleShot(duration, this, SLOT(blinkBlueOff()));
     }
 }
 
