@@ -34,6 +34,8 @@ void Model::startButtonClicked()
     //fill the sequence with new numbers
     for (int i = 0; i < 25; i++)
     {
+        srand(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
+
         //red = 1, yellow = 2, green = 3, blue = 4
         sequence[i] = rand()%4 + 1;
     }
