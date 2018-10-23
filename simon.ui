@@ -513,7 +513,7 @@
     <string>BLUE</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="ScoreBox">
+  <widget class="QTextEdit" name="LevelBox">
    <property name="geometry">
     <rect>
      <x>290</x>

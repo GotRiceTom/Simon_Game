@@ -3,15 +3,16 @@
 #include <QKeyEvent>
 #include <QApplication>
 #include <iostream>
+#include <thread>
 
-Simon::Simon(QWidget *parent) :
+Simon::Simon(Model* m,QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Simon)
 {
     ui->setupUi(this);
 
     //set up the model for Simon
-    SimonModel = new Model();
+    SimonModel = m;
 
     //give the progress bar a min and man
     // you can get the current value from the progress by calling
@@ -19,16 +20,13 @@ Simon::Simon(QWidget *parent) :
     ui->progressBar->setMinimum(0);
     ui->progressBar->setMaximum(5);
 
-    timer = new QTimer(this);
+    // the proper way to do a two way connection from view -> model and model -> view
+   //connect(this, SIGNAL(modelSignal()), SimonModel, SLOT(displayMessage()));
+  // connect(SimonModel, SIGNAL(endModelSignal()), this, SLOT(viewDisplay()));
 
-    connect(timer, SIGNAL(timeout()),this,SLOT(blink_Pattern()));
-
-
-    isButtonBlinked = true;
 
 
     //connecting the StartButton's signal 'clicked' to the function slot startButton_clicked
-   connect(ui->StartButton, SIGNAL(clicked(bool)), this, SLOT(startButton_clicked()));
 
    connect(ui->redButton,SIGNAL(clicked(bool)),this,SLOT(redButton_clicked()));
    connect(ui->yellowButton,SIGNAL(clicked(bool)),this,SLOT(yellowButton_clicked()));
@@ -36,6 +34,23 @@ Simon::Simon(QWidget *parent) :
    connect(ui->greenButton,SIGNAL(clicked(bool)),this,SLOT(greenButton_clicked()));
 
 
+
+
+   // the proper connection
+   connect(this, SIGNAL(startSignal()), SimonModel, SLOT(startButtonClicked()));
+
+   connect(SimonModel, SIGNAL(disableColorButtonsSignal()), this, SLOT(disableButton()));
+   connect(SimonModel, SIGNAL(enableColorButtonsSignal()), this, SLOT(enableButton()));
+   connect(SimonModel, SIGNAL(setLevelTextBoxSignal(QString)), this, SLOT(displayLevelTextBox(QString)));
+   connect(SimonModel, SIGNAL(setGameStateTextBoxSignal(QString)), this, SLOT(displayGameStateText(QString)));
+   connect(SimonModel, SIGNAL(setProgressBarValueSignal(int)), this, SLOT(displayProgressBar(int)));
+
+   //blink color slots connection
+
+   connect(SimonModel, SIGNAL(blinkRedSignal(int)), this, SLOT(blinkRedButton(int)));
+   connect(SimonModel, SIGNAL(blinkGreenSignal(int)), this ,SLOT(blinkGreenButton(int)));
+   connect(SimonModel, SIGNAL(blinkBlueSignal(int)), this ,SLOT(blinkBlueButton(int)));
+   connect(SimonModel, SIGNAL(blinkYellowSignal(int)),this,SLOT(blinkYellowButton(int)));
 }
 
 Simon::~Simon()
@@ -92,10 +107,8 @@ void Simon::keyReleaseEvent(QKeyEvent *event){
     }
 }
 
-void Simon::startButton_clicked(){
-    std::cout<< "Start Button Pressed" << std::endl;
-    timer->start(500);
-}
+
+
 
 void Simon::redButton_clicked()
 {
@@ -118,44 +131,68 @@ void Simon::yellowButton_clicked()
 
 }
 
-// this method is called when the start button is pressed
-// or it's the AI turn
-// This method task is to blink the AI pattern from
-// starting level to the current level
-void Simon::blink_Pattern()
+
+
+void Simon::on_StartButton_clicked()
 {
-    if(isButtonBlinked){
-        ui->redButton->setStyleSheet("background-color : white");
-        isButtonBlinked = false;
-
-    }else
-    {
-         ui->redButton->setStyleSheet("background-color : red");
-         isButtonBlinked = true;
-         timer->stop();
-    }
-
-    std::cout<< "Timer is calling the blink_Pattern"<< std::endl;
-
-
+    emit startSignal();
 }
 
-void Simon::blink_redButton()
+void Simon::viewDisplay()
 {
-
+    std::cout<< "viewDisplay is called from start button" << std::endl;
 }
 
-void Simon::blink_blueButton()
+void Simon::disableButton()
 {
-
+    ui->StartButton->setDisabled(true);
+    ui->redButton->setDisabled(true);
+    ui->greenButton->setDisabled(true);
+    ui->blueButton->setDisabled(true);
+    ui->yellowButton->setDisabled(true);
 }
 
-void Simon::blink_greenButton()
+void Simon::enableButton()
 {
-
+    ui->StartButton->setEnabled(true);
+    ui->redButton->setEnabled(true);
+    ui->greenButton->setEnabled(true);
+    ui->blueButton->setEnabled(true);
+    ui->yellowButton->setEnabled(true);
 }
 
-void Simon::blink_yellowButton()
+void Simon::displayLevelTextBox(QString text)
 {
+    ui->LevelBox->setText(text);
+}
 
+void Simon::displayGameStateText(QString text)
+{
+    ui->GameStateBox->setText(text);
+}
+
+void Simon::displayProgressBar(int progress)
+{
+    ui->progressBar->setValue(progress);
+}
+
+void Simon::blinkRedButton(int duration)
+{
+    ui->redButton->setStyleSheet("background-color:red");
+}
+
+void Simon::blinkGreenButton(int duration)
+{
+    ui->greenButton->setStyleSheet("background-color:green");
+}
+
+void Simon::blinkBlueButton(int duration)
+{
+    ui->blueButton->setStyleSheet("background-color:blue");
+}
+
+void Simon::blinkYellowButton(int duration)
+{
+    std::this_thread::sleep_for(std::chrono::milliseconds(duration));
+    ui->yellowButton->setStyleSheet("background-color:yellow");
 }

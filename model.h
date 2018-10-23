@@ -21,7 +21,7 @@ private:
     //length of current sequence
     int level;
 
-    int sequence[1000];
+    int sequence[25];
 
 public:
 
@@ -50,6 +50,7 @@ signals:
     void blinkYellowSignal(int duration);
     void blinkGreenSignal(int duration);
     void blinkBlueSignal(int duration);
+    void setAllColorButtonsWhite();
     void disableColorButtonsSignal();
     void enableColorButtonsSignal();
 };

@@ -15,24 +15,35 @@ class Simon : public QWidget
     Q_OBJECT
 
 public:
-    explicit Simon(QWidget *parent = nullptr);
+    explicit Simon(Model* SimonModel, QWidget *parent = nullptr);
     ~Simon();
 
-private slots:
-    void startButton_clicked();
+public  slots:
     void redButton_clicked();
     void greenButton_clicked();
     void blueButton_clicked();
     void yellowButton_clicked();
 
-    void blink_Pattern();
+    void on_StartButton_clicked();
 
-    void blink_redButton();
-    void blink_blueButton();
-    void blink_greenButton();
-    void blink_yellowButton();
+    void viewDisplay();
 
+    //slots that listen to model signals
+    void enableButton();
+    void disableButton();
+    void displayLevelTextBox(QString);
+    void displayGameStateText(QString);
+    void displayProgressBar(int);
 
+    //blinking slots for the view that listen to model signals
+
+    void blinkRedButton(int);
+    void blinkGreenButton(int);
+    void blinkBlueButton(int);
+    void blinkYellowButton(int);
+
+signals:
+    void startSignal();
 
 private:
     Ui::Simon *ui;
@@ -41,9 +52,13 @@ private:
 
     bool isButtonBlinked;
 
-    Model *SimonModel;
+    Model* SimonModel;
     QTimer *timer;
 
+    void blinkRedHelper();
+    void blinkBlueHelper();
+    void blinkGreenHelper();
+    void blinkYellowHelper();
 
 };
 

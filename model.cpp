@@ -2,19 +2,13 @@
 #include "model.h"
 #include <vector>
 #include <thread>
+#include <QThread>
 
 using namespace std;
 
 Model::Model()
 {
-    level = 0;
-
-    //fills the sequence with random numbers between 1 and 4
-    for (int i = 0; i < 1000; i++)
-    {
-        //red = 1, yellow = 2, green = 3, blue = 4
-        sequence[i] = rand()%4 + 1;
-    }
+    level = 4;
 
     gameState = "wait";
 }
@@ -24,6 +18,14 @@ void Model::startButtonClicked()
     //if the game is already running, do nothing
     if (gameState != "wait")
         return;
+
+    //fill the sequence with new numbers
+    for (int i = 0; i < 25; i++)
+    {
+        //red = 1, yellow = 2, green = 3, blue = 4
+        sequence[i] = rand()%4 + 1;
+        std::cout << sequence[i] << std::endl;
+    }
 
     //start computer's turn
     computersTurn();
@@ -35,16 +37,14 @@ void Model::computersTurn()
 
     level++;
 
-    emit disableColorButtonsSignal();
+    //emit disableColorButtonsSignal();
+    cout << "disabling" << endl;
 
     //set the game's level box to the current level
     emit setLevelTextBoxSignal(QString::number(level));
 
     //set the game state text box to "AI's Turn"
     emit setGameStateTextBoxSignal("AI's Turn");
-
-    //wait for 1 second before showing player colors
-    std::this_thread::sleep_for(std::chrono::seconds(1));
 
     //set the progress bar to 0%
     emit setProgressBarValueSignal(0);
@@ -60,6 +60,7 @@ void Model::computersTurn()
     gameState = "player";
 
     emit enableColorButtonsSignal();
+    cout << "enabling" << endl;
 }
 
 void Model::blinkTheSequence()
@@ -72,6 +73,7 @@ void Model::blinkTheSequence()
             duration = 200;
         }
         blinkColor(sequence[i],duration);
+        cout << "blinking " << i << endl;
     }
 }
 
@@ -205,24 +207,32 @@ void Model::blinkColor(int color,int duration)
     if (color == 1)
     {
         //blink the red button
-        emit blinkRedSignal();
+        emit blinkRedSignal(duration);
+        std::this_thread::sleep_for(std::chrono::milliseconds(duration));
+        emit setAllColorButtonsWhite();
     }
 
     if (color == 2)
     {
         //blink the yellow button
-        emit blinkYellowSignal();
+        emit blinkYellowSignal(duration);
+        QThread::msleep(duration);
+        emit setAllColorButtonsWhite();
     }
 
     if (color == 3)
     {
         //blink the green button
-        emit blinkGreenSignal();
+        emit blinkGreenSignal(duration);
+        QThread::msleep(duration);
+        emit setAllColorButtonsWhite();
     }
 
     if (color == 4)
     {
         //blink the blue button
-        emit blinkBlueSignal();
+        emit blinkBlueSignal(duration);
+        QThread::msleep(duration);
+        emit setAllColorButtonsWhite();
     }
 }
