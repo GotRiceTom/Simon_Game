@@ -9,19 +9,20 @@ using namespace std;
 
 Model::Model()
 {
-    level = 25;
+    level = 4;
     playerProgress = 0;
     AIProgress = 0;
     gameState = "wait";
     buffer = 0;
 
-    QTimer* timer = new QTimer(this);
+    timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(blinkTheSequence()));
-    timer->start(100);
 }
 
 void Model::startButtonClicked()
 {
+    timer->start(1000);
+
     //if the game is already running, do nothing
     if (gameState != "wait")
         return;
@@ -41,6 +42,8 @@ void Model::computersTurn()
 {
     gameState = "AI";
 
+    emit disableColorButtonsSignal();
+
     level++;
 
     //set the game's level box to the current level
@@ -52,48 +55,37 @@ void Model::computersTurn()
     //set the progress bar to 0%
     emit setProgressBarValueSignal(0);
 
-    //blink the colors
-    //blinkTheSequence();
+    emit enableColorButtonsSignal();
 }
 
 void Model::blinkTheSequence()
 {
     cout << "BLINK" << endl;
-
     if (gameState == "AI")
     {
-        if (AIProgress < level)
+        if (AIProgress == level)
         {
-             cout << "deepBLINK" << endl;
-            int duration = 2000 - (level*100);
-            if (duration < 200)
+            AIProgress = 0;
+
+            if (timer->interval() > 200)
             {
-                duration = 200;
+                timer->stop();
+                timer->setInterval(timer->interval()-100);
+                timer->start();
             }
 
-            blinkColor(sequence[AIProgress],duration);
+            gameState = "player";
+            emit setGameStateTextBoxSignal("Your Turn");
+            emit setColorsWhiteSignal();
+            return;
+        }
 
+        if (AIProgress < level)
+        {
+            blinkColor(sequence[AIProgress]);
             AIProgress++;
         }
     }
-
-    /*
-    for (int i = 0; i < level; i++)
-    {
-        int duration = 2000 - (level*100);
-        if (duration < 200)
-        {
-            duration = 200;
-        }
-
-        //this for loop is making the thread to go at the same time
-        // probably adjust the thread here?
-
-
-       blinkColor(sequence[i],duration);
-        cout << "blinking " << i << endl;
-    }
-    */
 }
 
 void Model::redButtonClicked()
@@ -208,6 +200,8 @@ void Model::blueButtonClicked()
 
 void Model::gameOver()
 {
+    timer->stop();
+
     gameState = "wait";
 
     level = 0;
@@ -223,52 +217,34 @@ void Model::gameOver()
 
 }
 
-void Model::blinkColor(int color,int duration)
+void Model::blinkColor(int color)
 {
     if (color == 1)
     {
-        //blink the red button
         emit blinkRedSignalOn();
-         //QTimer::singleShot(duration, this, SLOT(blinkRedOff()));
-
+        QTimer::singleShot(timer->interval()-200, this, SLOT(setColorsWhite()));
     }
 
     if (color == 2)
     {
-        //blink the yellow button
         emit blinkYellowSignalOn();
-         //QTimer::singleShot(duration, this, SLOT(blinkYellowOff()));
+        QTimer::singleShot(timer->interval()-200, this, SLOT(setColorsWhite()));
     }
 
     if (color == 3)
     {
-        //blink the green button
         emit blinkGreenSignalOn();
-        //QTimer::singleShot(duration, this, SLOT(blinkGreenOff()));
+        QTimer::singleShot(timer->interval()-200, this, SLOT(setColorsWhite()));
     }
 
     if (color == 4)
     {
-        //blink the blue button
         emit blinkBlueSignalOn();
-        //QTimer::singleShot(duration, this, SLOT(blinkBlueOff()));
+        QTimer::singleShot(timer->interval()-200, this, SLOT(setColorsWhite()));
     }
 }
 
-void Model::blinkBlueOff()
+void Model::setColorsWhite()
 {
-    emit blinkBlueSignalOff();
-}
-
-void Model::blinkGreenOff()
-{
-    emit blinkGreenSignalOff();
-}
-
-void Model::blinkRedOff(){
-    emit blinkRedSignalOff();
-}
-
-void Model::blinkYellowOff(){
-    emit blinkYellowSignalOff();
+    emit setColorsWhiteSignal();
 }

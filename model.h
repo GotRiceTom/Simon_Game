@@ -5,6 +5,7 @@
 #include <cstring>
 #include <QObject>
 #include <QString>
+#include <QTimer>
 
 class Model : public QObject
 {
@@ -14,6 +15,8 @@ class Model : public QObject
 private:
     //can either be "player", "AI", or "wait"
     std::string gameState;
+
+    QTimer* timer;
 
     //how many times the player has clicked
     int playerProgress;
@@ -32,6 +35,7 @@ public:
 
     void computersTurn();
     void gameOver();
+    void blinkColor(int color);
 
 public slots:
 
@@ -40,20 +44,15 @@ public slots:
     void yellowButtonClicked();
     void greenButtonClicked();
     void blueButtonClicked();
-    void blinkColor(int color,int duration);
     void blinkTheSequence();
-
-    //below methods will use the single shot
-    void blinkBlueOff();
-    void blinkGreenOff();
-    void blinkYellowOff();
-    void blinkRedOff();
+    void setColorsWhite();
 
 signals:
 
     void setGameStateTextBoxSignal(QString text);
     void setLevelTextBoxSignal(QString text);
     void setProgressBarValueSignal(int value);
+    void setColorsWhiteSignal();
 
     void blinkRedSignalOn();
     void blinkYellowSignalOn();

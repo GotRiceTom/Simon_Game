@@ -51,6 +51,7 @@ Simon::Simon(Model* m,QWidget *parent) :
    connect(SimonModel, SIGNAL(blinkGreenSignalOn()), this ,SLOT(blinkGreenButtonOn()));
    connect(SimonModel, SIGNAL(blinkBlueSignalOn()), this ,SLOT(blinkBlueButtonOn()));
    connect(SimonModel, SIGNAL(blinkYellowSignalOn()),this,SLOT(blinkYellowButtonOn()));
+   connect(SimonModel, SIGNAL(setColorsWhiteSignal()), this, SLOT(setAllColorButtonsToWhite()));
 
    connect(SimonModel, SIGNAL(blinkBlueSignalOff()), this, SLOT(blinkBlueButtonOff()));
    connect(SimonModel, SIGNAL(blinkRedSignalOff()), this, SLOT(blinkRedButtonOff()));
@@ -65,29 +66,22 @@ Simon::~Simon()
 }
 
 void Simon::keyPressEvent(QKeyEvent *event){
-    //all the keys are match to the numpad arrow
-    // using number 8,4,2,6 numpad
-
 
     if(event->key() == Qt::Key_8){
         ui->redButton->setStyleSheet("background-color:red");
-        //ui->progressBar->setValue(ui->progressBar->value() + 1);
     }
 
     if(event->key() == Qt::Key_4){
         ui->yellowButton->setStyleSheet("background-color:yellow");
-        //ui->progressBar->setValue(ui->progressBar->value() + 1);
     }
 
     if(event->key() == Qt::Key_2){
         ui->blueButton->setStyleSheet("background-color:blue");
-        //ui->progressBar->setValue(ui->progressBar->value() + 1);
 
     }
 
     if(event->key() == Qt::Key_6){
         ui->greenButton->setStyleSheet("background-color:green");
-        //ui->progressBar->setValue(ui->progressBar->value() + 1);
     }
 }
 
@@ -221,6 +215,14 @@ void Simon::blinkYellowButtonOn()
     ui->blueButton->setStyleSheet("background-color:white");
     ui->yellowButton->setStyleSheet("background-color:yellow");
 
+}
+
+void Simon::setAllColorButtonsToWhite()
+{
+    ui->redButton->setStyleSheet("background-color:white");
+    ui->yellowButton->setStyleSheet("background-color:white");
+    ui->greenButton->setStyleSheet("background-color:white");
+    ui->blueButton->setStyleSheet("background-color:white");
 }
 
 void Simon::blinkRedButtonOff()

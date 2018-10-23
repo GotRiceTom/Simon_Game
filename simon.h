@@ -23,6 +23,7 @@ public  slots:
     void greenButton_clicked();
     void blueButton_clicked();
     void yellowButton_clicked();
+    void setAllColorButtonsToWhite();
 
     void on_StartButton_clicked();
 
