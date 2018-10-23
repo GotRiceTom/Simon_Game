@@ -3,12 +3,13 @@
 #include <vector>
 #include <thread>
 #include <QThread>
+#include <QTimer>
 
 using namespace std;
 
 Model::Model()
 {
-    level = 4;
+    level = 1;
 
     gameState = "wait";
 }
@@ -24,7 +25,6 @@ void Model::startButtonClicked()
     {
         //red = 1, yellow = 2, green = 3, blue = 4
         sequence[i] = rand()%4 + 1;
-        std::cout << sequence[i] << std::endl;
     }
 
     //start computer's turn
@@ -37,7 +37,7 @@ void Model::computersTurn()
 
     level++;
 
-    //emit disableColorButtonsSignal();
+    emit disableColorButtonsSignal();
     cout << "disabling" << endl;
 
     //set the game's level box to the current level
@@ -67,12 +67,18 @@ void Model::blinkTheSequence()
 {
     for (int i = 0; i < level; i++)
     {
-        int duration = 1000 - (level*100);
+        int duration = 3000 - (level*100);
         if (duration < 200)
         {
             duration = 200;
         }
-        blinkColor(sequence[i],duration);
+
+        //this for loop is making the thread to go at the same time
+        // probably adjust the thread here?
+
+
+       blinkColor(sequence[i],duration);
+       QThread::msleep(duration);
         cout << "blinking " << i << endl;
     }
 }
@@ -185,6 +191,8 @@ void Model::blueButtonClicked()
     }
 }
 
+
+
 void Model::gameOver()
 {
     gameState = "wait";
@@ -207,32 +215,47 @@ void Model::blinkColor(int color,int duration)
     if (color == 1)
     {
         //blink the red button
-        emit blinkRedSignal(duration);
-        std::this_thread::sleep_for(std::chrono::milliseconds(duration));
-        emit setAllColorButtonsWhite();
+        emit blinkRedSignalOn();
+         QTimer::singleShot(duration, this, SLOT(blinkRedOff()));
+
     }
 
     if (color == 2)
     {
         //blink the yellow button
-        emit blinkYellowSignal(duration);
-        QThread::msleep(duration);
-        emit setAllColorButtonsWhite();
+        emit blinkYellowSignalOn();
+         QTimer::singleShot(duration, this, SLOT(blinkYellowOff()));
     }
 
     if (color == 3)
     {
         //blink the green button
-        emit blinkGreenSignal(duration);
-        QThread::msleep(duration);
-        emit setAllColorButtonsWhite();
+        emit blinkGreenSignalOn();
+        QTimer::singleShot(duration, this, SLOT(blinkGreenOff()));
     }
 
     if (color == 4)
     {
         //blink the blue button
-        emit blinkBlueSignal(duration);
-        QThread::msleep(duration);
-        emit setAllColorButtonsWhite();
+        emit blinkBlueSignalOn();
+        QTimer::singleShot(duration, this, SLOT(blinkBlueOff()));
     }
+}
+
+void Model::blinkBlueOff()
+{
+    emit blinkBlueSignalOff();
+}
+
+void Model::blinkGreenOff()
+{
+    emit blinkGreenSignalOff();
+}
+
+void Model::blinkRedOff(){
+    emit blinkRedSignalOff();
+}
+
+void Model::blinkYellowOff(){
+    emit blinkYellowSignalOff();
 }

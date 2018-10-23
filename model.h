@@ -30,7 +30,7 @@ public:
 
     void computersTurn();
     void gameOver();
-    void blinkColor(int color,int duration);
+
     void blinkTheSequence();
 
 public slots:
@@ -40,16 +40,30 @@ public slots:
     void yellowButtonClicked();
     void greenButtonClicked();
     void blueButtonClicked();
+    void blinkColor(int color,int duration);
+
+    //below methods will use the single shot
+    void blinkBlueOff();
+    void blinkGreenOff();
+    void blinkYellowOff();
+    void blinkRedOff();
 
 signals:
 
     void setGameStateTextBoxSignal(QString text);
     void setLevelTextBoxSignal(QString text);
     void setProgressBarValueSignal(int value);
-    void blinkRedSignal(int duration);
-    void blinkYellowSignal(int duration);
-    void blinkGreenSignal(int duration);
-    void blinkBlueSignal(int duration);
+
+    void blinkRedSignalOn();
+    void blinkYellowSignalOn();
+    void blinkGreenSignalOn();
+    void blinkBlueSignalOn();
+
+    void blinkRedSignalOff();
+    void blinkYellowSignalOff();
+    void blinkGreenSignalOff();
+    void blinkBlueSignalOff();
+
     void setAllColorButtonsWhite();
     void disableColorButtonsSignal();
     void enableColorButtonsSignal();

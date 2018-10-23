@@ -4,7 +4,7 @@
 #include "model.h"
 #include <QWidget>
 #include <QtGui>
-#include <QTimer>
+
 
 namespace Ui {
 class Simon;
@@ -37,10 +37,15 @@ public  slots:
 
     //blinking slots for the view that listen to model signals
 
-    void blinkRedButton(int);
-    void blinkGreenButton(int);
-    void blinkBlueButton(int);
-    void blinkYellowButton(int);
+    void blinkRedButtonOn();
+    void blinkGreenButtonOn();
+    void blinkBlueButtonOn();
+    void blinkYellowButtonOn();
+
+    void blinkRedButtonOff();
+    void blinkGreenButtonOff();
+    void blinkBlueButtonOff();
+    void blinkYellowButtonOff();
 
 signals:
     void startSignal();
@@ -53,12 +58,6 @@ private:
     bool isButtonBlinked;
 
     Model* SimonModel;
-    QTimer *timer;
-
-    void blinkRedHelper();
-    void blinkBlueHelper();
-    void blinkGreenHelper();
-    void blinkYellowHelper();
 
 };
 

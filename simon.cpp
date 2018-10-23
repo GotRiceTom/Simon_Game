@@ -47,10 +47,16 @@ Simon::Simon(Model* m,QWidget *parent) :
 
    //blink color slots connection
 
-   connect(SimonModel, SIGNAL(blinkRedSignal(int)), this, SLOT(blinkRedButton(int)));
-   connect(SimonModel, SIGNAL(blinkGreenSignal(int)), this ,SLOT(blinkGreenButton(int)));
-   connect(SimonModel, SIGNAL(blinkBlueSignal(int)), this ,SLOT(blinkBlueButton(int)));
-   connect(SimonModel, SIGNAL(blinkYellowSignal(int)),this,SLOT(blinkYellowButton(int)));
+   connect(SimonModel, SIGNAL(blinkRedSignalOn()), this, SLOT(blinkRedButtonOn()));
+   connect(SimonModel, SIGNAL(blinkGreenSignalOn()), this ,SLOT(blinkGreenButtonOn()));
+   connect(SimonModel, SIGNAL(blinkBlueSignalOn()), this ,SLOT(blinkBlueButtonOn()));
+   connect(SimonModel, SIGNAL(blinkYellowSignalOn()),this,SLOT(blinkYellowButtonOn()));
+
+   connect(SimonModel, SIGNAL(blinkBlueSignalOff()), this, SLOT(blinkBlueButtonOff()));
+   connect(SimonModel, SIGNAL(blinkRedSignalOff()), this, SLOT(blinkRedButtonOff()));
+   connect(SimonModel, SIGNAL(blinkGreenSignalOff()), this, SLOT(blinkGreenButtonOff()));
+   connect(SimonModel, SIGNAL(blinkYellowSignalOff()), this, SLOT(blinkYellowButtonOff()));
+
 }
 
 Simon::~Simon()
@@ -176,23 +182,48 @@ void Simon::displayProgressBar(int progress)
     ui->progressBar->setValue(progress);
 }
 
-void Simon::blinkRedButton(int duration)
+//Below methods blink the button on and off //
+void Simon::blinkRedButtonOn()
 {
     ui->redButton->setStyleSheet("background-color:red");
+
 }
 
-void Simon::blinkGreenButton(int duration)
+
+void Simon::blinkGreenButtonOn()
 {
     ui->greenButton->setStyleSheet("background-color:green");
+
 }
 
-void Simon::blinkBlueButton(int duration)
+void Simon::blinkBlueButtonOn()
 {
     ui->blueButton->setStyleSheet("background-color:blue");
+
 }
 
-void Simon::blinkYellowButton(int duration)
+void Simon::blinkYellowButtonOn()
 {
-    std::this_thread::sleep_for(std::chrono::milliseconds(duration));
     ui->yellowButton->setStyleSheet("background-color:yellow");
+
+}
+
+void Simon::blinkRedButtonOff()
+{
+    ui->redButton->setStyleSheet("background-color:white");
+}
+
+void Simon::blinkGreenButtonOff()
+{
+    ui->greenButton->setStyleSheet("background-color:white");
+}
+
+void Simon::blinkBlueButtonOff()
+{
+    ui->blueButton->setStyleSheet("background-color:white");
+}
+
+void Simon::blinkYellowButtonOff()
+{
+    ui->yellowButton->setStyleSheet("background-color:white");
 }
