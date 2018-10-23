@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>399</width>
-    <height>372</height>
+    <height>390</height>
    </rect>
   </property>
   <property name="palette">
@@ -79,7 +79,7 @@
   </property>
   <widget class="QPushButton" name="redButton">
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="geometry">
     <rect>
@@ -227,7 +227,7 @@
   </widget>
   <widget class="QPushButton" name="greenButton">
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="geometry">
     <rect>
@@ -405,7 +405,7 @@
   </widget>
   <widget class="QPushButton" name="yellowButton">
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="geometry">
     <rect>
@@ -634,7 +634,7 @@
   </widget>
   <widget class="QPushButton" name="blueButton">
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="geometry">
     <rect>
@@ -808,7 +808,7 @@
      <x>10</x>
      <y>320</y>
      <width>381</width>
-     <height>41</height>
+     <height>61</height>
     </rect>
    </property>
    <property name="palette">
@@ -883,7 +883,7 @@
     </font>
    </property>
    <property name="placeholderText">
-    <string>YOU CAN PLAY WITH THE MOUSE OR THE NUMBER PAD (8,4,6,2).  ISN'T THAT NICE?</string>
+    <string>YOU CAN PLAY WITH THE MOUSE OR THE NUMBER PAD (RED=8,  YELLOW=4,  GREEN=6,  BLUE=2,  START=0.  ISN'T THAT NICE?</string>
    </property>
   </widget>
   <widget class="QTextEdit" name="GameStateBox">

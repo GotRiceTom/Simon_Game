@@ -1,9 +1,12 @@
+/**
+ * Eric Naegle and Tom Nguyen
+ * CS 3505
+ * Assignment 5
+**/
+
 #include "simon.h"
 #include "ui_simon.h"
 #include <QKeyEvent>
-#include <QApplication>
-#include <iostream>
-#include <thread>
 
 Simon::Simon(Model* m,QWidget *parent) :
     QWidget(parent),
@@ -16,19 +19,14 @@ Simon::Simon(Model* m,QWidget *parent) :
     ui->progressBar->setMinimum(0);
     ui->progressBar->setMaximum(100);
 
-   // the proper way to do a two way connection from view -> model and model -> view
-   //connect(this, SIGNAL(modelSignal()), SimonModel, SLOT(displayMessage()));
-   // connect(SimonModel, SIGNAL(endModelSignal()), this, SLOT(viewDisplay()));
-
-   //connect(ui->redButton,SIGNAL(clicked(bool)),this,SLOT(redButton_clicked()));
-
-   // View-to-Model connections
+   // View-to-Model connections to tell the model something was clicked
    connect(this, SIGNAL(startSignal()), SimonModel, SLOT(startButtonClicked()));
    connect(this, SIGNAL(redSignal()), SimonModel, SLOT(redButtonClicked()));
    connect(this, SIGNAL(yellowSignal()), SimonModel, SLOT(yellowButtonClicked()));
    connect(this, SIGNAL(greenSignal()), SimonModel, SLOT(greenButtonClicked()));
    connect(this, SIGNAL(blueSignal()), SimonModel, SLOT(blueButtonClicked()));
 
+   //Model-to-View connections to modify button text and statuses
    connect(SimonModel, SIGNAL(disableColorButtonsSignal()), this, SLOT(disableColorButtons()));
    connect(SimonModel, SIGNAL(enableColorButtonsSignal()), this, SLOT(enableColorButtons()));
    connect(SimonModel, SIGNAL(disableStartButtonSignal()), this, SLOT(disableStartButton()));
@@ -50,30 +48,51 @@ Simon::~Simon()
     delete ui;
 }
 
+//our app allows for the keypad to be used to play, so this listens to those 5 keys and treats them like clicks
 void Simon::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_8)
     {
-        ui->redButton->setStyleSheet("background-color:red");
-        emit redSignal();
+        if (ui->redButton->isEnabled())
+        {
+            ui->redButton->setStyleSheet("background-color:red");
+            emit redSignal();
+        }
     }
 
     if(event->key() == Qt::Key_4)
     {
-        ui->yellowButton->setStyleSheet("background-color:yellow");
-        emit yellowSignal();
+        if (ui->yellowButton->isEnabled())
+        {
+            ui->yellowButton->setStyleSheet("background-color:yellow");
+            emit yellowSignal();
+        }
     }
 
     if(event->key() == Qt::Key_6)
     {
-        ui->greenButton->setStyleSheet("background-color:green");
-        emit greenSignal();
+        if (ui->greenButton->isEnabled())
+        {
+            ui->greenButton->setStyleSheet("background-color:green");
+            emit greenSignal();
+        }
     }
 
     if(event->key() == Qt::Key_2)
     {
-        ui->blueButton->setStyleSheet("background-color:blue");
-        emit blueSignal();
+        if (ui->blueButton->isEnabled())
+        {
+            ui->blueButton->setStyleSheet("background-color:blue");
+            emit blueSignal();
+        }
+    }
+
+    if(event->key() == Qt::Key_0)
+    {
+        if (ui->StartButton->isEnabled())
+        {
+            emit startSignal();
+        }
     }
 }
 
@@ -102,7 +121,6 @@ void Simon::keyReleaseEvent(QKeyEvent *event)
 
 void Simon::disableColorButtons()
 {
-    std::cout << "DISABLING BUTTONS" << std::endl;
     ui->redButton->setDisabled(true);
     ui->yellowButton->setDisabled(true);
     ui->greenButton->setDisabled(true);
@@ -111,7 +129,6 @@ void Simon::disableColorButtons()
 
 void Simon::enableColorButtons()
 {
-    std::cout << "ENABLING BUTTONS" << std::endl;
     ui->redButton->setEnabled(true);
     ui->yellowButton->setEnabled(true);
     ui->greenButton->setEnabled(true);
@@ -120,13 +137,11 @@ void Simon::enableColorButtons()
 
 void Simon::disableStartButton()
 {
-    std::cout << "DISABLING START" << std::endl;
     ui->StartButton->setDisabled(true);
 }
 
 void Simon::enableStartButton()
 {
-    std::cout << "ENABLING START" << std::endl;
     ui->StartButton->setEnabled(true);
 }
 
