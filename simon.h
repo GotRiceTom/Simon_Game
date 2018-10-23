@@ -19,37 +19,36 @@ public:
     ~Simon();
 
 public  slots:
-    void redButton_clicked();
-    void greenButton_clicked();
-    void blueButton_clicked();
-    void yellowButton_clicked();
     void setAllColorButtonsToWhite();
-
-    void on_StartButton_clicked();
-
-    void viewDisplay();
-
     //slots that listen to model signals
-    void enableButton();
-    void disableButton();
+    void enableColorButtons();
+    void disableColorButtons();
+    void enableStartButton();
+    void disableStartButton();
     void displayLevelTextBox(QString);
     void displayGameStateText(QString);
     void displayProgressBar(int);
-
-    //blinking slots for the view that listen to model signals
 
     void blinkRedButtonOn();
     void blinkGreenButtonOn();
     void blinkBlueButtonOn();
     void blinkYellowButtonOn();
 
-    void blinkRedButtonOff();
-    void blinkGreenButtonOff();
-    void blinkBlueButtonOff();
-    void blinkYellowButtonOff();
+private slots:
+    void on_redButton_clicked();
+    void on_greenButton_clicked();
+    void on_yellowButton_clicked();
+    void on_blueButton_clicked();
+    void on_StartButton_clicked();
+
+    //blinking slots for the view that listen to model signals
 
 signals:
     void startSignal();
+    void redSignal();
+    void yellowSignal();
+    void greenSignal();
+    void blueSignal();
 
 private:
     Ui::Simon *ui;

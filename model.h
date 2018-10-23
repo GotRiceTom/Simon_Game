@@ -21,7 +21,6 @@ private:
     //how many times the player has clicked
     int playerProgress;
     int AIProgress;
-    int buffer;
 
     //length of current sequence
     int level;
@@ -59,14 +58,11 @@ signals:
     void blinkGreenSignalOn();
     void blinkBlueSignalOn();
 
-    void blinkRedSignalOff();
-    void blinkYellowSignalOff();
-    void blinkGreenSignalOff();
-    void blinkBlueSignalOff();
-
     void setAllColorButtonsWhite();
     void disableColorButtonsSignal();
     void enableColorButtonsSignal();
+    void disableStartButtonSignal();
+    void enableStartButtonSignal();
 };
 
 #endif // MODEL_H

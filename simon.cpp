@@ -11,53 +11,38 @@ Simon::Simon(Model* m,QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //set up the model for Simon
     SimonModel = m;
 
-    //give the progress bar a min and man
-    // you can get the current value from the progress by calling
-    // progressBar.value()s
     ui->progressBar->setMinimum(0);
     ui->progressBar->setMaximum(100);
 
-    // the proper way to do a two way connection from view -> model and model -> view
+   // the proper way to do a two way connection from view -> model and model -> view
    //connect(this, SIGNAL(modelSignal()), SimonModel, SLOT(displayMessage()));
-  // connect(SimonModel, SIGNAL(endModelSignal()), this, SLOT(viewDisplay()));
+   // connect(SimonModel, SIGNAL(endModelSignal()), this, SLOT(viewDisplay()));
 
+   //connect(ui->redButton,SIGNAL(clicked(bool)),this,SLOT(redButton_clicked()));
 
-
-    //connecting the StartButton's signal 'clicked' to the function slot startButton_clicked
-
-   connect(ui->redButton,SIGNAL(clicked(bool)),this,SLOT(redButton_clicked()));
-   connect(ui->yellowButton,SIGNAL(clicked(bool)),this,SLOT(yellowButton_clicked()));
-   connect(ui->blueButton,SIGNAL(clicked(bool)),this,SLOT(blueButton_clicked()));
-   connect(ui->greenButton,SIGNAL(clicked(bool)),this,SLOT(greenButton_clicked()));
-
-
-
-
-   // the proper connection
+   // View-to-Model connections
    connect(this, SIGNAL(startSignal()), SimonModel, SLOT(startButtonClicked()));
+   connect(this, SIGNAL(redSignal()), SimonModel, SLOT(redButtonClicked()));
+   connect(this, SIGNAL(yellowSignal()), SimonModel, SLOT(yellowButtonClicked()));
+   connect(this, SIGNAL(greenSignal()), SimonModel, SLOT(greenButtonClicked()));
+   connect(this, SIGNAL(blueSignal()), SimonModel, SLOT(blueButtonClicked()));
 
-   connect(SimonModel, SIGNAL(disableColorButtonsSignal()), this, SLOT(disableButton()));
-   connect(SimonModel, SIGNAL(enableColorButtonsSignal()), this, SLOT(enableButton()));
+   connect(SimonModel, SIGNAL(disableColorButtonsSignal()), this, SLOT(disableColorButtons()));
+   connect(SimonModel, SIGNAL(enableColorButtonsSignal()), this, SLOT(enableColorButtons()));
+   connect(SimonModel, SIGNAL(disableStartButtonSignal()), this, SLOT(disableStartButton()));
+   connect(SimonModel, SIGNAL(enableStartButtonSignal()), this, SLOT(enableStartButton()));
    connect(SimonModel, SIGNAL(setLevelTextBoxSignal(QString)), this, SLOT(displayLevelTextBox(QString)));
    connect(SimonModel, SIGNAL(setGameStateTextBoxSignal(QString)), this, SLOT(displayGameStateText(QString)));
    connect(SimonModel, SIGNAL(setProgressBarValueSignal(int)), this, SLOT(displayProgressBar(int)));
 
-   //blink color slots connection
-
+   //Model-to-View connections to blink colors
    connect(SimonModel, SIGNAL(blinkRedSignalOn()), this, SLOT(blinkRedButtonOn()));
    connect(SimonModel, SIGNAL(blinkGreenSignalOn()), this ,SLOT(blinkGreenButtonOn()));
    connect(SimonModel, SIGNAL(blinkBlueSignalOn()), this ,SLOT(blinkBlueButtonOn()));
    connect(SimonModel, SIGNAL(blinkYellowSignalOn()),this,SLOT(blinkYellowButtonOn()));
    connect(SimonModel, SIGNAL(setColorsWhiteSignal()), this, SLOT(setAllColorButtonsToWhite()));
-
-   connect(SimonModel, SIGNAL(blinkBlueSignalOff()), this, SLOT(blinkBlueButtonOff()));
-   connect(SimonModel, SIGNAL(blinkRedSignalOff()), this, SLOT(blinkRedButtonOff()));
-   connect(SimonModel, SIGNAL(blinkGreenSignalOff()), this, SLOT(blinkGreenButtonOff()));
-   connect(SimonModel, SIGNAL(blinkYellowSignalOff()), this, SLOT(blinkYellowButtonOff()));
-
 }
 
 Simon::~Simon()
@@ -65,100 +50,84 @@ Simon::~Simon()
     delete ui;
 }
 
-void Simon::keyPressEvent(QKeyEvent *event){
-
-    if(event->key() == Qt::Key_8){
+void Simon::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_8)
+    {
         ui->redButton->setStyleSheet("background-color:red");
+        emit redSignal();
     }
 
-    if(event->key() == Qt::Key_4){
+    if(event->key() == Qt::Key_4)
+    {
         ui->yellowButton->setStyleSheet("background-color:yellow");
+        emit yellowSignal();
     }
 
-    if(event->key() == Qt::Key_2){
-        ui->blueButton->setStyleSheet("background-color:blue");
-
-    }
-
-    if(event->key() == Qt::Key_6){
+    if(event->key() == Qt::Key_6)
+    {
         ui->greenButton->setStyleSheet("background-color:green");
+        emit greenSignal();
+    }
+
+    if(event->key() == Qt::Key_2)
+    {
+        ui->blueButton->setStyleSheet("background-color:blue");
+        emit blueSignal();
     }
 }
 
-
-void Simon::keyReleaseEvent(QKeyEvent *event){
-
-    if(event->key() == Qt::Key_8){
+void Simon::keyReleaseEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_8)
+    {
         ui->redButton->setStyleSheet("background-color:white");
-
     }
-    //check key press works
-    if(event->key() == Qt::Key_4){
+
+    if(event->key() == Qt::Key_4)
+    {
         ui->yellowButton->setStyleSheet("background-color:white");
     }
-    //check key press works
-    if(event->key() == Qt::Key_2){
-        ui->blueButton->setStyleSheet("background-color:white");
 
+    if(event->key() == Qt::Key_6)
+    {
+         ui->greenButton->setStyleSheet("background-color:white");
     }
-    //check key press works
-    if(event->key() == Qt::Key_6){
-        ui->greenButton->setStyleSheet("background-color:white");
+
+    if(event->key() == Qt::Key_2)
+    {
+         ui->blueButton->setStyleSheet("background-color:white");
     }
 }
 
-
-
-
-void Simon::redButton_clicked()
+void Simon::disableColorButtons()
 {
-     ui->progressBar->setValue(ui->progressBar->value() + 1);
-}
-
-void Simon::greenButton_clicked()
-{
-     ui->progressBar->setValue(ui->progressBar->value() + 1);
-}
-
-void Simon::blueButton_clicked()
-{
-     ui->progressBar->setValue(ui->progressBar->value() + 1);
-}
-
-void Simon::yellowButton_clicked()
-{
-    ui->progressBar->setValue(ui->progressBar->value() + 1);
-
-}
-
-
-
-void Simon::on_StartButton_clicked()
-{
-    emit startSignal();
-}
-
-void Simon::viewDisplay()
-{
-    std::cout<< "viewDisplay is called from start button" << std::endl;
-}
-
-void Simon::disableButton()
-{
-    ui->StartButton->setDisabled(true);
+    std::cout << "DISABLING BUTTONS" << std::endl;
     ui->redButton->setDisabled(true);
+    ui->yellowButton->setDisabled(true);
     ui->greenButton->setDisabled(true);
     ui->blueButton->setDisabled(true);
-    ui->yellowButton->setDisabled(true);
 }
 
-void Simon::enableButton()
+void Simon::enableColorButtons()
 {
-    ui->StartButton->setEnabled(true);
+    std::cout << "ENABLING BUTTONS" << std::endl;
     ui->redButton->setEnabled(true);
+    ui->yellowButton->setEnabled(true);
     ui->greenButton->setEnabled(true);
     ui->blueButton->setEnabled(true);
-    ui->yellowButton->setEnabled(true);
+}
+
+void Simon::disableStartButton()
+{
+    std::cout << "DISABLING START" << std::endl;
+    ui->StartButton->setDisabled(true);
+}
+
+void Simon::enableStartButton()
+{
+    std::cout << "ENABLING START" << std::endl;
+    ui->StartButton->setEnabled(true);
 }
 
 void Simon::displayLevelTextBox(QString text)
@@ -176,45 +145,24 @@ void Simon::displayProgressBar(int progress)
     ui->progressBar->setValue(progress);
 }
 
-//Below methods blink the button on and off //
 void Simon::blinkRedButtonOn()
 {
-    ui->redButton->setStyleSheet("background-color:white");
-    ui->yellowButton->setStyleSheet("background-color:white");
-    ui->greenButton->setStyleSheet("background-color:white");
-    ui->blueButton->setStyleSheet("background-color:white");
     ui->redButton->setStyleSheet("background-color:red");
-}
-
-
-void Simon::blinkGreenButtonOn()
-{
-    ui->redButton->setStyleSheet("background-color:white");
-    ui->yellowButton->setStyleSheet("background-color:white");
-    ui->greenButton->setStyleSheet("background-color:white");
-    ui->blueButton->setStyleSheet("background-color:white");
-    ui->greenButton->setStyleSheet("background-color:green");
-
-}
-
-void Simon::blinkBlueButtonOn()
-{
-    ui->redButton->setStyleSheet("background-color:white");
-    ui->yellowButton->setStyleSheet("background-color:white");
-    ui->greenButton->setStyleSheet("background-color:white");
-    ui->blueButton->setStyleSheet("background-color:white");
-    ui->blueButton->setStyleSheet("background-color:blue");
-
 }
 
 void Simon::blinkYellowButtonOn()
 {
-    ui->redButton->setStyleSheet("background-color:white");
-    ui->yellowButton->setStyleSheet("background-color:white");
-    ui->greenButton->setStyleSheet("background-color:white");
-    ui->blueButton->setStyleSheet("background-color:white");
     ui->yellowButton->setStyleSheet("background-color:yellow");
+}
 
+void Simon::blinkGreenButtonOn()
+{
+    ui->greenButton->setStyleSheet("background-color:green");
+}
+
+void Simon::blinkBlueButtonOn()
+{
+    ui->blueButton->setStyleSheet("background-color:blue");
 }
 
 void Simon::setAllColorButtonsToWhite()
@@ -225,22 +173,27 @@ void Simon::setAllColorButtonsToWhite()
     ui->blueButton->setStyleSheet("background-color:white");
 }
 
-void Simon::blinkRedButtonOff()
+void Simon::on_StartButton_clicked()
 {
-    ui->redButton->setStyleSheet("background-color:white");
+    emit startSignal();
 }
 
-void Simon::blinkGreenButtonOff()
+void Simon::on_redButton_clicked()
 {
-    ui->greenButton->setStyleSheet("background-color:white");
+    emit redSignal();
 }
 
-void Simon::blinkBlueButtonOff()
+void Simon::on_yellowButton_clicked()
 {
-    ui->blueButton->setStyleSheet("background-color:white");
+    emit yellowSignal();
 }
 
-void Simon::blinkYellowButtonOff()
+void Simon::on_greenButton_clicked()
 {
-    ui->yellowButton->setStyleSheet("background-color:white");
+    emit greenSignal();
+}
+
+void Simon::on_blueButton_clicked()
+{
+    emit blueSignal();
 }

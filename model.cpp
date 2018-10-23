@@ -9,11 +9,10 @@ using namespace std;
 
 Model::Model()
 {
-    level = 4;
+    level = 0;
     playerProgress = 0;
     AIProgress = 0;
     gameState = "wait";
-    buffer = 0;
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(blinkTheSequence()));
@@ -22,6 +21,10 @@ Model::Model()
 void Model::startButtonClicked()
 {
     timer->start(1000);
+
+    emit disableStartButtonSignal();
+
+    cout << "START CLICKED" << endl;
 
     //if the game is already running, do nothing
     if (gameState != "wait")
@@ -54,8 +57,6 @@ void Model::computersTurn()
 
     //set the progress bar to 0%
     emit setProgressBarValueSignal(0);
-
-    emit enableColorButtonsSignal();
 }
 
 void Model::blinkTheSequence()
@@ -77,6 +78,7 @@ void Model::blinkTheSequence()
             gameState = "player";
             emit setGameStateTextBoxSignal("Your Turn");
             emit setColorsWhiteSignal();
+            emit enableColorButtonsSignal();
             return;
         }
 
@@ -90,6 +92,7 @@ void Model::blinkTheSequence()
 
 void Model::redButtonClicked()
 {
+    cout << "RED CLICKED" << endl;
     //if it's not the player's turn, do nothing.
     if (gameState != "player")
     {
@@ -117,6 +120,7 @@ void Model::redButtonClicked()
 
 void Model::yellowButtonClicked()
 {
+    cout << "YELLOW CLICKED" << endl;
     //if it's not the player's turn, do nothing.
     if (gameState != "player")
     {
@@ -144,6 +148,7 @@ void Model::yellowButtonClicked()
 
 void Model::greenButtonClicked()
 {
+    cout << "GREEN CLICKED" << endl;
     //if it's not the player's turn, do nothing.
     if (gameState != "player")
     {
@@ -171,6 +176,7 @@ void Model::greenButtonClicked()
 
 void Model::blueButtonClicked()
 {
+    cout << "BLUE CLICKED" << endl;
     //if it's not the player's turn, do nothing.
     if (gameState != "player")
     {
@@ -197,7 +203,6 @@ void Model::blueButtonClicked()
 }
 
 
-
 void Model::gameOver()
 {
     timer->stop();
@@ -215,6 +220,7 @@ void Model::gameOver()
     //set the game state box to "Game Over"
     emit setGameStateTextBoxSignal("GAME OVER");
 
+    emit enableStartButtonSignal();
 }
 
 void Model::blinkColor(int color)
