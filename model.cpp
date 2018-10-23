@@ -9,7 +9,7 @@ using namespace std;
 
 Model::Model()
 {
-    level = 1;
+    level = 2;
 
     gameState = "wait";
 }
@@ -67,7 +67,7 @@ void Model::blinkTheSequence()
 {
     for (int i = 0; i < level; i++)
     {
-        int duration = 3000 - (level*100);
+        int duration = 2000 - (level*100);
         if (duration < 200)
         {
             duration = 200;
@@ -78,7 +78,6 @@ void Model::blinkTheSequence()
 
 
        blinkColor(sequence[i],duration);
-       QThread::msleep(duration);
         cout << "blinking " << i << endl;
     }
 }
